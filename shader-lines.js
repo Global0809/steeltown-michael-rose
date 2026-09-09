@@ -1,5 +1,5 @@
 /* Original fragment shader from the user's purchased Shader Lines component (Ali Imam).
- * The fragment source is preserved verbatim, including its original RGB output.
+ * Original motion and channel interference are preserved; only the output palette changes.
  * Native WebGL hosts it without adding React or a second, legacy Three.js runtime.
  */
 (() => {
@@ -49,7 +49,19 @@
           }
         }
 
-        gl_FragColor = vec4(color[2],color[1],color[0],1.0);
+        // Pink-spectrum output: retain the three independently moving color bands.
+        vec3 rgb = clamp(vec3(color[2],color[1],color[0]), 0.0, 1.0);
+        float brightness = max(rgb.r, max(rgb.g, rgb.b));
+        vec3 weights = rgb * rgb;
+        vec3 hotPink = vec3(1.0, 0.06, 0.40);
+        vec3 rose = vec3(1.0, 0.34, 0.57);
+        vec3 fuchsia = vec3(1.0, 0.02, 0.92);
+        vec3 pinkSpectrum = (weights.r * hotPink + weights.g * rose + weights.b * fuchsia)
+            / max(weights.r + weights.g + weights.b, 0.000001);
+        float overlap = smoothstep(0.55, 1.0, min(rgb.r, min(rgb.g, rgb.b)));
+        vec3 pearlBlush = vec3(1.0, 0.88, 0.94);
+        gl_FragColor = vec4(brightness * mix(pinkSpectrum, pearlBlush, overlap), 1.0);
+        // End output palette.
       }
     `;
 
