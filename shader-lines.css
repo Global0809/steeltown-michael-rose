@@ -1,0 +1,41 @@
+.shader-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:strict;background:#000}
+.shader-backdrop canvas{display:block;width:100%;height:100%;opacity:0;pointer-events:none}
+.shader-ready .shader-backdrop canvas{opacity:1}
+
+/* The original RGB shader is the continuous backdrop of every page section.
+   Brand pink remains in the product, photography and actions, never in the shader. */
+body{background:#000}
+main,.header,footer{color:#faf7f9}
+.experience,.collection,.craft,.romance,.cinema,.closing,footer{background:transparent}
+.experience-aura,.experience[data-finish=silver] .experience-aura,.cinema::before,.cinema::after,.closing::before,.closing::after{display:none}
+.header{background:#08080bea;border-color:#ffffff24}
+.nav-shop{border-color:#ffffff44}
+.nav-shop:hover{background:#faf7f9;color:#191318}
+.experience-heading,.section-heading,.romance-copy h2,.signature,.closing h2,.closing>.eyebrow,.experience-scroll,.bottle-hint{text-shadow:0 2px 14px #000,0 0 3px #000}
+.experience h1 em{color:#f2a4c9;text-shadow:0 2px 30px #0009}
+.section-heading h2 em,.romance-copy h2 em,.closing h2 em{color:#f2a4c9}
+.studio-information{background:#0b0a0df5;border-color:#ffffff2c;box-shadow:0 20px 70px #0005}
+.studio-information .finish{border-color:#ffffff45}
+.studio-information .finish.active{border-color:#f284b6;background:#c6096824}
+.studio-information .availability,.collection-availability,.closing .availability{color:#e4d5df}
+.bottle-tools button{color:#faf7f9;background:#0b0a0def;border-color:#ffffff4d}
+.bottle-tools button:hover{border-color:#f2a4c9}
+.bottle-hint{color:#e8e0e6}
+.ribbon-line,.story-line{stroke:#dbaac25c}
+.bottle-shadow{background:radial-gradient(ellipse,#eee4ee1f,transparent 69%)}
+.product-badge{color:#54142f}
+.product-title,.product-meta,.buy-button{background:#080809ed;box-shadow:0 0 0 10px #080809ed}
+.buy-button{border-color:#ffffff55}
+.buy-button:hover,.buy-button:focus-visible{color:#f2a4c9;border-color:#f2a4c9}
+.selected-edition .buy-button{border-color:#f2a4c9}
+.craft-copy{background:#080809e8;box-shadow:0 0 35px 25px #080809e8}
+.craft dt{color:#e4d5df}
+.craft dl>div{border-color:#ffffff32}
+.romance-copy{background:#080809b8}
+.romance-copy .eyebrow,.romance-copy .text-link{color:#faf7f9}
+.closing .availability,.collection-availability{width:fit-content;margin-left:auto;margin-right:auto;background:#080809e8;padding:5px 12px}
+footer{border-top:1px solid #ffffff33;background:#08080bbb}
+footer>p{border-color:#ffffff33;color:#dcd3d9}
+.cinema .hero-media{border-color:#ffffff45}
+.skip-link{color:#54142f}
+@media(prefers-reduced-motion:reduce){.shader-backdrop canvas{transition:none}}
