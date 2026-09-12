@@ -6,4 +6,4 @@ Published with GitHub Pages from the root of the codex/publish branch. All asset
 
 Shader Lines is credited to Ali Imam and was supplied by the site owner. Brand assets and media were supplied or commissioned for this website. Third-party runtime notices are included in vendor/.
 
-Online checkout is currently unavailable. The site displays the current catalog values: Eau de parfum, 100 ml, $199 USD, Pink Candy Rose Edition and The Silver Edition. Automatic English film captions await final proofreading.
+The supplied PayPal checkout is connected from both product sheets. Catalog values: Eau de parfum, 100 ml, $175 USD, Pink Candy Rose Edition and The Silver Edition. The PayPal page lists a generic Perfume item and does not receive the selected finish; buyers are told to confirm their finish with the seller before paying. Automatic English film captions await final proofreading.

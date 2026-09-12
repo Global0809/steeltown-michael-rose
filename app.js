@@ -60,30 +60,29 @@
     photo=(photo+direction+count)%count; showPhoto();
   }
   function paintEdition() {
-    const edition=store.edition, name=catalog.editions[edition].name;
+    const edition=store.edition;
     $$('[data-current-edition]').forEach(button=>button.dataset.buy=edition);
     $$('[data-select], .finish').forEach(button=>{ const selected=(button.dataset.select||button.dataset.finish)===edition; button.setAttribute('aria-pressed',String(selected)); button.classList.toggle('active',selected); });
     $$('.product-card').forEach(card=>card.classList.toggle('selected-edition',card.dataset.edition===edition));
     $('#order-title').textContent=catalog.editions[edition].title;
-    $('#order-note').textContent=`${name.toUpperCase()} — ${catalog.sizeMl} ML`;
-    $('#note-edition').textContent=name.toUpperCase(); $('#copy-note').textContent='Copy';
     $$('[data-price]').forEach(node=>node.textContent=price);
     $$('[data-volume]').forEach(node=>node.textContent=`${catalog.sizeMl} ml`);
     $$('[data-format]').forEach(node=>node.textContent=catalog.format);
     $$('[data-availability]').forEach(node=>{ node.textContent=canBuy()?'':catalog.checkout.pendingMessage; node.hidden=canBuy(); });
-    $$('[data-current-edition]').forEach(button=>{ button.firstChild.textContent=canBuy()?'View the edition ':'Explore the edition '; });
-    $('#checkout-link').disabled=!canBuy(); $('#checkout-link').textContent=canBuy()?'Continue to checkout ↗':'Not available online yet';
-    $('.checkout-caption').textContent=canBuy()?'Review your edition and total at checkout.':catalog.checkout.pendingMessage;
-    $('.checkout-note').hidden=!canBuy();
+    $$('[data-current-edition]').forEach(button=>{ button.firstChild.textContent=canBuy()?'Shop the edition ':'Explore the edition '; });
+    const checkout=$('#checkout-link');
+    checkout.setAttribute('aria-disabled',String(!canBuy())); checkout.tabIndex=canBuy()?0:-1;
+    if(canBuy())checkout.href=checkoutUrl();else checkout.removeAttribute('href');
+    checkout.textContent=canBuy()?'Continue to PayPal ↗':'Not available online yet';
+    $('.checkout-caption').textContent=canBuy()?catalog.checkout.caption:catalog.checkout.pendingMessage;
     photo=0; buildGallery(); showPhoto();
   }
   store.subscribe(paintEdition); paintEdition();
   $$('[data-select], .finish').forEach(button=>button.addEventListener('click',()=>store.selectEdition(button.dataset.select||button.dataset.finish)));
-  $('#checkout-link').addEventListener('click',()=>{ if(canBuy()) window.open(checkoutUrl(),'_blank','noopener,noreferrer'); });
+  $('#checkout-link').addEventListener('click',event=>{ if(!canBuy()) event.preventDefault(); });
   $('#gallery-previous').addEventListener('click',()=>stepPhoto(-1));
   $('#gallery-next').addEventListener('click',()=>stepPhoto(1));
   $('.order-photo').addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();stepPhoto(event.key==='ArrowLeft'?-1:1);}});
-  $('#copy-note').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#order-note').textContent);$('#copy-note').textContent='Copied';$('#order-status').textContent='Edition note copied.';}catch{$('#order-status').textContent=`Your edition is ${store.edition}.`;}});
 
   function remember(dialog,trigger) { contexts.set(dialog,{focus:trigger||document.activeElement,x:scrollX,y:scrollY}); }
   function close(dialog,next) { if(next)afterClose.set(dialog,next); dialog.close(); }

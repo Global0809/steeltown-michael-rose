@@ -1,14 +1,15 @@
 // The only source of product facts and purchase availability.
 window.STEELTOWN_CATALOG = {
-  price: 199,
+  price: 175,
   currency: 'USD',
   sizeMl: 100,
   format: 'Eau de parfum',
   checkout: {
-    enabled: false,
-    url: null,
-    // Merchant confirmation is pending: the existing hosted link charges $175 / 100 ml.
-    // A live checkout must agree with this catalog's price, size and selected edition.
+    enabled: true,
+    url: 'https://www.paypal.com/ncp/payment/ZU5K2273WDMPJ',
+    // User supplied this exact gateway again; its live offer is $175 USD / 100 ml.
+    // This hosted link has no edition options. Never imply that site selection is transmitted.
+    caption: 'PayPal lists a single “Perfume” item. Confirm your Pink or Silver finish with the seller before paying.',
     pendingMessage: 'Online purchasing is not available yet.'
   },
   editions: {
