@@ -18,6 +18,15 @@
   }
   on(preference, 'change', paint); paint();
 
+  const openingLine=document.querySelector('.experience h1 > span');
+  if (openingLine) {
+    const words=openingLine.textContent.trim().split(/\s+/);
+    const spoken=document.createElement('span'); spoken.className='sr-only'; spoken.textContent=words.join(' ');
+    const visual=document.createElement('span'); visual.setAttribute('aria-hidden','true');
+    words.forEach((word,index)=>{const span=document.createElement('span');span.className='hero-word';span.style.setProperty('--word',index);span.textContent=word;visual.append(span);if(index<words.length-1)visual.append(' ');});
+    openingLine.replaceChildren(spoken,visual);
+  }
+
   // The words stay intact for assistive technology; only visual glyphs float.
   document.querySelectorAll('.experience h1 em, .section-heading h2 em, .craft-copy h2 em, .romance-copy h2 em, .closing h2 em').forEach(element => {
     const text = element.textContent;

@@ -5,7 +5,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const product = $('#product-dialog'), film = $('#film-dialog'), video = $('#full-film');
   const preview = $('#hero-media');
-  let photo = 1, music, musicWanted = false, musicRevision = 0, toastTimer;
+  let photo = 0, music, musicWanted = false, musicRevision = 0, toastTimer;
   let teaser, teaserVisible = false, teaserPaused = false;
   const contexts = new WeakMap(), afterClose = new WeakMap();
   const canMove = () => !reduced.matches && !document.body.classList.contains('motion-paused');
@@ -35,19 +35,36 @@
   $('#sound-toggle').addEventListener('click',toggleMusic); $('#footer-sound').addEventListener('click',toggleMusic);
 
   function showPhoto() {
-    const edition=store.edition, name=catalog.editions[edition].name;
-    $('#bottle-poster').src=`assets/${edition}-campaign-1.jpg`;
-    $('#bottle-poster').alt=`${name} Steeltown Michael sculptural perfume bottle`;
-    $('#order-image').src=`assets/${edition}-campaign-${photo}.jpg`;
-    $('#order-image').alt=`${name} Edition perfume ${photo===1 ? 'bottle' : edition==='pink' ? 'with presentation packaging' : 'with the sculptural cap removed'}`;
-    $('#gallery-count').textContent=`0${photo} / 02`;
+    const entry=catalog.editions[store.edition], gallery=entry.gallery, selected=gallery[photo];
+    $('#bottle-poster').src=entry.cover;
+    $('#bottle-poster').alt=`${entry.name} Steeltown Michael sculptural perfume bottle`;
+    $('#order-image').src=selected.src; $('#order-image').alt=selected.alt;
+    $('.order-photo').style.setProperty('--gallery-backdrop',`url("${selected.src}")`);
+    $('#gallery-count').textContent=`${String(photo+1).padStart(2,'0')} / ${String(gallery.length).padStart(2,'0')}`;
+    $('#gallery-caption').textContent=selected.label;
+    $$('#gallery-thumbs button').forEach((button,index)=>button.setAttribute('aria-current',String(index===photo)));
+  }
+  function buildGallery() {
+    const fragment=document.createDocumentFragment();
+    catalog.editions[store.edition].gallery.forEach((image,index)=>{
+      const button=document.createElement('button'); button.type='button';
+      button.setAttribute('aria-label',`View photo ${index+1}: ${image.label}`);
+      button.setAttribute('aria-current',String(index===photo));
+      const thumbnail=document.createElement('img'); thumbnail.src=image.src; thumbnail.alt=''; thumbnail.loading='lazy';
+      button.append(thumbnail); button.addEventListener('click',()=>{photo=index;showPhoto();});fragment.append(button);
+    });
+    $('#gallery-thumbs').replaceChildren(fragment);
+  }
+  function stepPhoto(direction) {
+    const count=catalog.editions[store.edition].gallery.length;
+    photo=(photo+direction+count)%count; showPhoto();
   }
   function paintEdition() {
     const edition=store.edition, name=catalog.editions[edition].name;
     $$('[data-current-edition]').forEach(button=>button.dataset.buy=edition);
     $$('[data-select], .finish').forEach(button=>{ const selected=(button.dataset.select||button.dataset.finish)===edition; button.setAttribute('aria-pressed',String(selected)); button.classList.toggle('active',selected); });
     $$('.product-card').forEach(card=>card.classList.toggle('selected-edition',card.dataset.edition===edition));
-    $('#order-title').textContent=`The ${name} Edition`;
+    $('#order-title').textContent=catalog.editions[edition].title;
     $('#order-note').textContent=`${name.toUpperCase()} — ${catalog.sizeMl} ML`;
     $('#note-edition').textContent=name.toUpperCase(); $('#copy-note').textContent='Copy';
     $$('[data-price]').forEach(node=>node.textContent=price);
@@ -58,19 +75,20 @@
     $('#checkout-link').disabled=!canBuy(); $('#checkout-link').textContent=canBuy()?'Continue to checkout ↗':'Not available online yet';
     $('.checkout-caption').textContent=canBuy()?'Review your edition and total at checkout.':catalog.checkout.pendingMessage;
     $('.checkout-note').hidden=!canBuy();
-    photo=1; showPhoto();
+    photo=0; buildGallery(); showPhoto();
   }
   store.subscribe(paintEdition); paintEdition();
   $$('[data-select], .finish').forEach(button=>button.addEventListener('click',()=>store.selectEdition(button.dataset.select||button.dataset.finish)));
   $('#checkout-link').addEventListener('click',()=>{ if(canBuy()) window.open(checkoutUrl(),'_blank','noopener,noreferrer'); });
-  $('#gallery-previous').addEventListener('click',()=>{photo=photo===1?2:1;showPhoto();});
-  $('#gallery-next').addEventListener('click',()=>{photo=photo===1?2:1;showPhoto();});
+  $('#gallery-previous').addEventListener('click',()=>stepPhoto(-1));
+  $('#gallery-next').addEventListener('click',()=>stepPhoto(1));
+  $('.order-photo').addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();stepPhoto(event.key==='ArrowLeft'?-1:1);}});
   $('#copy-note').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#order-note').textContent);$('#copy-note').textContent='Copied';$('#order-status').textContent='Edition note copied.';}catch{$('#order-status').textContent=`Your edition is ${store.edition}.`;}});
 
   function remember(dialog,trigger) { contexts.set(dialog,{focus:trigger||document.activeElement,x:scrollX,y:scrollY}); }
   function close(dialog,next) { if(next)afterClose.set(dialog,next); dialog.close(); }
   function openProduct(edition,trigger) {
-    store.selectEdition(edition); photo=1; showPhoto(); remember(product,trigger);
+    store.selectEdition(edition); photo=0; buildGallery(); showPhoto(); remember(product,trigger);
     teaser?.pause(); product.showModal();
   }
   $$('[data-buy]').forEach(button=>button.addEventListener('click',()=>openProduct(button.dataset.buy,button)));
