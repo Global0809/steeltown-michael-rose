@@ -65,7 +65,7 @@
     $$('[data-current-edition]').forEach(button=>button.dataset.buy=edition);
     $$('[data-select], .finish').forEach(button=>{ const selected=(button.dataset.select||button.dataset.finish)===edition; button.setAttribute('aria-pressed',String(selected)); button.classList.toggle('active',selected); });
     $$('.product-card').forEach(card=>card.classList.toggle('selected-edition',card.dataset.edition===edition));
-    $('#order-title').textContent=catalog.editions[edition].title;
+    $('#order-title').textContent=catalog.editions[edition].title; $('#studio-word').textContent=edition==='pink'?'Rose.':'Silver.';
     $$('[data-price]').forEach(node=>node.textContent=price);
     $$('[data-volume]').forEach(node=>node.textContent=`${catalog.sizeMl} ml`);
     $$('[data-format]').forEach(node=>node.textContent=catalog.format);
@@ -87,17 +87,23 @@
 
   function remember(dialog,trigger) { contexts.set(dialog,{focus:trigger||document.activeElement,x:scrollX,y:scrollY}); }
   function close(dialog,next) { if(next)afterClose.set(dialog,next); dialog.close(); }
+  function setProductView(view) {
+    const studio=view==='studio'; product.dataset.view=studio?'studio':'photos';
+    $('#studio-view').hidden=!studio; $('#product-photos').hidden=studio;
+    $('#view-studio').setAttribute('aria-pressed',String(studio)); $('#view-photos').setAttribute('aria-pressed',String(!studio));
+    $('.studio-lighting').hidden=!studio;
+    document.dispatchEvent(new CustomEvent('steeltown:studio',{detail:{open:product.open,view:product.dataset.view}}));
+  }
+  $('#view-studio').addEventListener('click',()=>setProductView('studio'));
+  $('#view-photos').addEventListener('click',()=>setProductView('photos'));
   function openProduct(edition,trigger) {
     store.selectEdition(edition); photo=0; buildGallery(); showPhoto(); remember(product,trigger);
-    teaser?.pause(); product.showModal();
+    teaser?.pause(); document.body.classList.add("product-open"); product.showModal(); setProductView("studio");
   }
   $$('[data-buy]').forEach(button=>button.addEventListener('click',()=>openProduct(button.dataset.buy,button)));
-  function exploreStudio() {
-    const go=()=>{ $('#experience').scrollIntoView({behavior:canMove()?'smooth':'instant'}); const target=$('#bottle-canvas').hidden?$('#experience-buy'):$('#bottle-canvas'); target.focus({preventScroll:true}); };
-    if(product.open)close(product,go);else go();
-  }
+  document.addEventListener('steeltown:open-product',()=>openProduct(store.edition,$('#bottle-canvas')));
+  function exploreStudio(event) { openProduct(store.edition,event?.currentTarget); }
   $$('[data-explore-studio]').forEach(button=>button.addEventListener('click',exploreStudio));
-  const modelButton=document.createElement('button'); modelButton.className='model-button'; modelButton.textContent='Explore in 3D ↗'; modelButton.addEventListener('click',exploreStudio); $('.order-photo').append(modelButton);
   function syncTeaser() {
     $('#teaser-pause').disabled=!canMove(); $('#replay-teaser').disabled=!canMove();
     if(!teaser)return;
@@ -122,6 +128,7 @@
     dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close(dialog);}});
     dialog.addEventListener('close',()=>{
       if(dialog===film){video.pause();if(musicWanted)startMusic();}
+      if(dialog===product){document.body.classList.remove('product-open');document.dispatchEvent(new CustomEvent('steeltown:studio',{detail:{open:false,view:'studio'}}));}
       const next=afterClose.get(dialog);afterClose.delete(dialog);
       if(next)requestAnimationFrame(next); else {const context=contexts.get(dialog);context?.focus?.focus({preventScroll:true});}
       syncTeaser();
