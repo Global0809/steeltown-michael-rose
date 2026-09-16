@@ -10,12 +10,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="design.css">
-  <link rel="stylesheet" href="shader-lines.css?v=paypal-live-1">
-  <script src="catalog.js?v=paypal-live-1" defer></script>
-  <script src="app.js?v=paypal-live-1" defer></script><script src="motion.js?v=paypal-live-1" defer></script>
+  <link rel="stylesheet" href="design.css?v=rose-atelier-1">
+  <link rel="stylesheet" href="editorial.css?v=rose-atelier-1">
+  <script src="catalog.js?v=rose-atelier-1" defer></script>
+  <script src="app.js?v=rose-atelier-1" defer></script><script src="editorial-motion.js?v=rose-atelier-1" defer></script>
   <script src="shader-lines.js?v=pink-spectrum-1" defer></script>
-  <script type="module" src="atelier.js?v=paypal-live-1"></script>
+  <script type="module" src="atelier.js?v=rose-atelier-1"></script>
 </head>
 <body>
   <div class="shader-backdrop" id="shader-backdrop" aria-hidden="true"><canvas id="shader-lines" tabindex="-1"></canvas></div>
@@ -23,19 +23,20 @@
   <header class="header">
     <nav class="nav-left" aria-label="Main navigation"><a href="#collection">The collection</a><button data-open-film>The film <span class="small-play" aria-hidden="true">▷</span></button></nav>
     <a class="wordmark" href="#" aria-label="Steeltown Michael Parfum home"><svg class="crown" viewBox="0 0 40 23" aria-hidden="true"><path d="M5 18 2 5l10 6L20 1l8 10 10-6-3 13Z M5 22h30"/></svg><span class="wordmark-top">STEELTOWN</span><span class="wordmark-name">MICHAEL</span><span class="wordmark-bottom">PARFUM</span></a>
-    <div class="nav-right"><button class="sound-button" id="sound-toggle" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sound-label">Sound off</span></button><a class="nav-shop" href="#collection">Discover <span aria-hidden="true">↗</span></a></div>
+    <div class="nav-right"><button class="sound-button" id="sound-toggle" aria-pressed="false" aria-label="Turn background music on"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sound-label">Sound off</span></button><a class="nav-shop" href="#collection">Discover <span aria-hidden="true">↗</span></a></div>
   </header>
   <main>
     <section class="experience" id="experience" aria-labelledby="hero-title" data-finish="pink">
       <div class="experience-aura" aria-hidden="true"></div>
       <svg class="ribbon-line hero-line" viewBox="0 0 1000 560" fill="none" aria-hidden="true"><path pathLength="1" d="M30 415C138 233 839 191 972 350C1098 502 125 544 101 381C78 227 644 64 813 142"/></svg>
-      <div class="experience-heading"><p class="eyebrow">A love letter in chrome</p><h1 id="hero-title"><span>Every woman’s</span><em>dream.</em></h1></div>
-      <div class="bottle-stage" id="bottle-stage" aria-busy="true">
+      <div class="experience-heading"><p class="eyebrow">A love letter in chrome</p><h1 id="hero-title"><span>Every woman’s</span><em>dream.</em></h1><p class="hero-caption">A little romance. An unforgettable presence.</p></div>
+      <div class="bottle-stage" id="bottle-stage" aria-busy="true"><span class="stage-monogram" aria-hidden="true">M</span>
         <img class="bottle-poster" id="bottle-poster" src="assets/pink-campaign-3.webp" alt="Pink Steeltown Michael sculptural perfume bottle" fetchpriority="high" width="1024" height="1280">
-        <div class="product-scan" aria-hidden="true"><div class="scan-lines"></div><i class="scan-ring scan-ring-one"></i><i class="scan-ring scan-ring-two"></i><i class="scan-ring scan-ring-three"></i><i class="scan-axis"></i></div><div class="scan-sweep" aria-hidden="true"></div><canvas id="bottle-canvas" tabindex="0" role="img" aria-label="Interactive perfume bottle. Drag to turn. Arrow keys rotate; plus and minus zoom; Home resets the view." aria-describedby="bottle-help"></canvas>
+        <div class="edition-flash" aria-hidden="true"></div><canvas id="bottle-canvas" tabindex="0" role="img" aria-label="Interactive perfume bottle. Drag to turn. Arrow keys rotate; plus and minus zoom; Home resets the view." aria-describedby="bottle-help"></canvas>
         <span class="bottle-shadow" aria-hidden="true"></span>
         <svg class="cap-wisp" viewBox="0 0 160 200" fill="none" aria-hidden="true"><path pathLength="1" d="M80 195C23 159 131 126 85 90C34 55 76 37 99 5"/></svg>
       </div>
+      <span class="hero-note" aria-hidden="true">THE MICHAEL COLLECTION — 01 / 02</span>
       <div class="studio-information">
         <span class="edition-index" id="edition-index">01 / PINK CANDY ROSE EDITION</span>
         <h2 class="edition-name" id="edition-name">Pink Candy <em>Rose.</em></h2>
@@ -50,24 +51,26 @@
       <div class="bottle-hint"><span id="bottle-help">Drag to turn · pinch to zoom</span><span class="sr-only" id="bottle-status" role="status">Preparing your bottle…</span><button id="bottle-retry" hidden>Try 3D again ↗</button></div>
       <a class="experience-scroll" href="#collection">The collection <span aria-hidden="true">↓</span></a>
     </section>
+<div class="brand-ribbon" aria-hidden="true"><div class="brand-track"><span>Every woman’s dream <b>✦</b> Timeless elegance <b>✦</b> Irresistible attraction <b>✦</b> Michael Parfum <b>✦</b></span><span>Every woman’s dream <b>✦</b> Timeless elegance <b>✦</b> Irresistible attraction <b>✦</b> Michael Parfum <b>✦</b></span></div></div>
     <section class="collection section-pad" id="collection" aria-labelledby="collection-title">
       <div class="section-heading"><div><p class="eyebrow">Two finishes. One Michael.</p><h2 id="collection-title" tabindex="-1">Pick your <em>muse.</em></h2></div><p>Choose the finish<br>that feels like you.</p></div>
       <div class="product-grid">
-        <article class="product-card" data-edition="pink">
-          <button class="product-image" data-buy="pink" aria-label="Explore Pink Candy Rose Edition, 100 ml, 175 US dollars"><img src="assets/pink-campaign-3.webp" alt="Glossy Pink Candy Rose sculptural perfume bottle in a sunset rose garden with falling petals" loading="lazy" width="1024" height="1280"><span class="product-badge">PINK CANDY ROSE EDITION</span><span class="product-view">Discover Pink <span aria-hidden="true">↗</span></span></button>
+        <article class="product-card" data-edition="pink"><span class="product-number" aria-hidden="true">01</span>
+          <button class="product-image" data-buy="pink" aria-label="Explore Pink Candy Rose Edition, 100 ml, 175 US dollars"><img src="assets/pink-campaign-3.webp" alt="Glossy Pink Candy Rose sculptural perfume bottle in a sunset rose garden with falling petals" loading="lazy" width="1024" height="1280"><img class="product-alternate" src="assets/pink-campaign-4.webp" alt="" aria-hidden="true" loading="lazy" width="1122" height="1402"><span class="product-badge">PINK CANDY ROSE EDITION</span><span class="product-view">Discover Pink <span aria-hidden="true">↗</span></span></button>
           <div class="product-title"><h3>Pink Candy Rose Edition</h3><span><b data-price>$175</b> <small>USD</small></span></div><div class="product-meta"><span><span data-format>Eau de parfum</span> · <span data-volume>100 ml</span></span><span class="color-dot pink-dot" aria-label="Pink"></span></div><button class="buy-button" data-buy="pink">Explore Pink Candy Rose <span aria-hidden="true">↗</span></button>
         </article>
-        <article class="product-card" data-edition="silver">
-          <button class="product-image" data-buy="silver" aria-label="Explore the Silver Edition, 100 ml, 175 US dollars"><img src="assets/silver-campaign-1.jpg" alt="Reflective silver sculpted Michael perfume bottle on a dark natural display" loading="lazy" width="1024" height="1280"><span class="product-badge">THE SILVER EDITION</span><span class="product-view">Discover Silver <span aria-hidden="true">↗</span></span></button>
+        <article class="product-card" data-edition="silver"><span class="product-number" aria-hidden="true">02</span>
+          <button class="product-image" data-buy="silver" aria-label="Explore the Silver Edition, 100 ml, 175 US dollars"><img src="assets/silver-campaign-3.webp" alt="Silver Michael perfume bottle in a moonlit rose garden" loading="lazy" width="1024" height="1280"><img class="product-alternate" src="assets/silver-campaign-4.webp" alt="" aria-hidden="true" loading="lazy" width="1122" height="1402"><span class="product-badge">THE SILVER EDITION</span><span class="product-view">Discover Silver <span aria-hidden="true">↗</span></span></button>
           <div class="product-title"><h3>The Silver Edition</h3><span><b data-price>$175</b> <small>USD</small></span></div><div class="product-meta"><span><span data-format>Eau de parfum</span> · <span data-volume>100 ml</span></span><span class="color-dot silver-dot" aria-label="Silver"></span></div><button class="buy-button" data-buy="silver">Explore Silver <span aria-hidden="true">↗</span></button>
         </article>
       </div>
       <p class="collection-availability" data-availability hidden></p>
     </section>
-    <section class="craft section-pad" id="details" aria-labelledby="craft-title"><div class="craft-image"><img src="assets/silver-campaign-2.jpg" alt="The Silver bottle with its sculptural cap beside the revealed atomizer" loading="lazy" width="1024" height="1280"></div><div class="craft-copy"><p class="eyebrow">The details, up close</p><h2 id="craft-title">A silhouette<br>to <em>remember.</em></h2><p>The sculptural bottle brings Michael’s stage presence to your dressing table.</p><dl><div><dt>Format</dt><dd data-format>Eau de parfum</dd></div><div><dt>Volume</dt><dd data-volume>100 ml</dd></div><div><dt>Finish</dt><dd>Pink or Silver</dd></div></dl><button class="text-link" data-explore-studio>Explore the bottle <span aria-hidden="true">↗</span></button></div></section>
+    <section class="craft section-pad" id="details" aria-labelledby="craft-title"><div class="craft-image"><img src="assets/silver-campaign-2.jpg" alt="The Silver bottle with its sculptural cap beside the revealed atomizer" loading="lazy" width="1024" height="1280"></div><div class="craft-copy"><span class="craft-index" aria-hidden="true">M.</span><p class="eyebrow">The details, up close</p><h2 id="craft-title">A silhouette<br>to <em>remember.</em></h2><p>The sculptural bottle brings Michael’s stage presence to your dressing table.</p><dl><div><dt>Format</dt><dd data-format>Eau de parfum</dd></div><div><dt>Volume</dt><dd data-volume>100 ml</dd></div><div><dt>Finish</dt><dd>Pink or Silver</dd></div></dl><button class="text-link" data-explore-studio>Explore the bottle <span aria-hidden="true">↗</span></button></div></section>
     <section class="romance" id="story" aria-labelledby="romance-title">
       <div class="romance-image"><img id="campaign-portrait" src="assets/rose-couture.webp" alt="Woman in a hot-pink couture gown with sculpted fabric roses, surrounded by pink silk and petals" loading="lazy" width="1122" height="1402"><span class="photo-caption">THE ART OF BEING UNFORGETTABLE</span></div>
       <div class="romance-copy"><p class="eyebrow">The art of being unforgettable</p><h2 id="romance-title"><span>Wear the</span><em>feeling.</em></h2><svg class="ribbon-line story-line" viewBox="0 0 360 50" fill="none" aria-hidden="true"><path pathLength="1" d="M4 37C90 7 250 1 342 25C373 35 264 44 221 30"/></svg><a class="text-link" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a><span class="signature">With love, Michael</span></div>
+      <div class="story-inset" aria-hidden="true"><img src="assets/pink-campaign-5.webp" alt="" loading="lazy" width="1122" height="1402"></div><span class="romance-watermark" aria-hidden="true">Michael</span>
     </section>
     <section class="cinema section-pad" id="film" aria-labelledby="film-title">
       <div class="section-heading"><div><p class="eyebrow">The Steeltown love story</p><h2 id="film-title">Love, on <em>repeat.</em></h2></div><button class="text-link" data-open-film>Watch the full film <span aria-hidden="true">↗</span></button></div>
@@ -78,7 +81,7 @@
         <div class="film-end" id="hero-end" hidden><p>Find your <em>Michael.</em></p><button class="button button-pink" data-buy="pink" data-current-edition>Shop the edition <span aria-hidden="true">↗</span></button><button class="replay-link" id="replay-teaser">Replay the moment</button></div>
       </div>
     </section>
-    <section class="closing" id="forever"><p class="eyebrow">A love letter in chrome</p><h2>Forever <em>yours.</em></h2><button class="button button-pink" data-buy="pink" data-current-edition>Shop the edition <span aria-hidden="true">↗</span></button><p class="availability" data-availability hidden></p></section>
+    <section class="closing" id="forever"><div class="closing-frame" aria-hidden="true"><img src="assets/pink-campaign-4.webp" alt="" loading="lazy" width="1122" height="1402"></div><div class="closing-frame" aria-hidden="true"><img src="assets/silver-campaign-5.webp" alt="" loading="lazy" width="1122" height="1402"></div><p class="eyebrow">A love letter in chrome</p><h2>Forever <em>yours.</em></h2><button class="button button-pink" data-buy="pink" data-current-edition>Shop the edition <span aria-hidden="true">↗</span></button><p class="availability" data-availability hidden></p></section>
   </main>
   <footer><a class="footer-brand" href="#">Steeltown <em>Michael</em><small>PARFUM</small></a><div><a href="#collection">Collection</a><a href="#details">Bottle details</a><button data-open-film>The film</button><button id="footer-sound">Play the music</button></div><p>© <span id="year">2026</span> Steeltown Michael Parfum</p></footer>
   <dialog class="product-dialog" id="product-dialog" aria-labelledby="order-title"><button class="dialog-close" data-close="product-dialog" aria-label="Close product details">✕</button><div class="order-photo" role="region" aria-label="Product photo gallery" tabindex="0"><img id="order-image" src="assets/pink-campaign-3.webp" alt="Pink Edition perfume bottle"><div class="gallery-controls"><button id="gallery-previous" aria-label="Previous product image">←</button><div class="gallery-position"><span id="gallery-count" aria-live="polite">01 / 05</span><span id="gallery-caption">Rose reverie</span></div><button id="gallery-next" aria-label="Next product image">→</button></div><div class="gallery-thumbs" id="gallery-thumbs" role="group" aria-label="Choose a product photo"></div></div><div class="order-content"><p class="eyebrow">The Michael collection</p><h2 id="order-title">Pink Candy Rose Edition</h2><p class="order-size"><span data-format>Eau de parfum</span> · <span data-volume>100 ml</span></p><div class="edition-selector" aria-label="Choose an edition"><button data-select="pink" aria-pressed="true"><i class="color-dot pink-dot"></i> Pink</button><button data-select="silver" aria-pressed="false"><i class="color-dot silver-dot"></i> Silver</button></div><div class="order-price"><span data-price>$175</span> <small>USD</small></div><p class="order-description">Timeless elegance. Irresistible attraction.<br>Your Steeltown Michael moment awaits.</p><a class="button button-pink checkout-link" id="checkout-link" href="https://www.paypal.com/ncp/payment/ZU5K2273WDMPJ" target="_blank" rel="noopener noreferrer">Continue to PayPal ↗</a><p class="checkout-caption">PayPal lists a single “Perfume” item. Confirm your Pink or Silver finish with the seller before paying.</p><p class="sr-only" id="order-status" role="status"></p></div></dialog>

@@ -17,6 +17,7 @@
   function paintSound() {
     const playing = !!music && !music.paused && !music.ended;
     $('#sound-toggle').setAttribute('aria-pressed',String(playing));
+    $('#sound-toggle').setAttribute('aria-label',playing?'Turn background music off':'Turn background music on');
     $('#sound-label').textContent = playing ? 'Sound on' : 'Sound off';
     $('#footer-sound').textContent = playing ? 'Pause the music' : 'Play the music';
   }
