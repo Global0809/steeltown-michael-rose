@@ -15,7 +15,7 @@ window.STEELTOWN_CATALOG = {
   editions: {
     pink: {
       name: 'Pink Candy Rose', shortName: 'Pink', title: 'Pink Candy Rose Edition',
-      modelSrc: 'assets/models/steeltown-michael-pink.glb', cover: 'assets/pink-campaign-3.webp',
+      modelSrc: 'assets/models/steeltown-scan.glb', cover: 'assets/pink-campaign-3.webp',
       gallery: [
         {src:'assets/pink-campaign-3.webp', alt:'Glossy Pink Candy Rose perfume bottle in a sunset rose garden with falling petals', label:'Rose reverie'},
         {src:'assets/pink-campaign-1.jpg', alt:'Pink sculptural perfume bottle standing in a field of flowers', label:'The original'},
@@ -26,7 +26,7 @@ window.STEELTOWN_CATALOG = {
     },
     silver: {
       name: 'Silver', shortName: 'Silver', title: 'The Silver Edition',
-      modelSrc: 'assets/models/steeltown-michael-silver.glb', cover: 'assets/silver-campaign-1.jpg',
+      modelSrc: 'assets/models/steeltown-scan.glb', cover: 'assets/silver-campaign-1.jpg',
       gallery: [
         {src:'assets/silver-campaign-3.webp', alt:'Polished silver perfume bottle in a moonlit rose garden beside a reflection pool', label:'Moonlit roses'},
         {src:'assets/silver-campaign-1.jpg', alt:'Silver sculptural perfume bottle on a dark natural display', label:'The original'},

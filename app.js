@@ -50,8 +50,6 @@
 
   function showPhoto() {
     const entry=catalog.editions[store.edition], gallery=entry.gallery, selected=gallery[photo];
-    $('#bottle-poster').src=entry.cover;
-    $('#bottle-poster').alt=`${entry.name} Steeltown Michael sculptural perfume bottle`;
     $('#order-image').src=selected.src; $('#order-image').alt=selected.alt;
     $('.order-photo').style.setProperty('--gallery-backdrop',`url("${selected.src}")`);
     $('#gallery-count').textContent=`${String(photo+1).padStart(2,'0')} / ${String(gallery.length).padStart(2,'0')}`;
