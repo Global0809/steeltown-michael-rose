@@ -32,12 +32,13 @@
     $('#sound-toggle').setAttribute('aria-pressed',String(playing));
     $('#sound-toggle').setAttribute('aria-label',playing?'Turn background music off':'Turn background music on');
     $('#sound-label').textContent = playing ? 'Sound on' : 'Sound off';
-    $('#footer-sound').textContent = playing ? 'Pause the music' : 'Play the music';
+    $('#footer-sound').textContent = playing ? 'Sound off' : 'Sound on';
+    document.dispatchEvent(new CustomEvent('steeltown:sound',{detail:{enabled:playing}}));
   }
   async function startMusic() {
     if (!musicWanted || film.open || document.hidden) return;
     if (!music) {
-      music = new Audio('assets/music.mp3'); music.loop = true; music.volume = .32;
+      music = new Audio('assets/music.mp3'); music.loop = true; music.volume = .20;
       ['play','pause','ended'].forEach(name=>music.addEventListener(name,paintSound));
     }
     const revision = ++musicRevision;
@@ -48,9 +49,22 @@
   function toggleMusic() { musicWanted = !musicWanted; if (!musicWanted) { musicRevision++; music?.pause(); paintSound(); } else startMusic(); }
   $('#sound-toggle').addEventListener('click',toggleMusic); $('#footer-sound').addEventListener('click',toggleMusic);
 
+  function paintFrame(frame,image) {
+    const crop=image.crop;
+    frame.dataset.crop=crop?'sheet':'full';
+    frame.dataset.scene=image.scene||'pearl';
+    frame.style.setProperty('--crop-x',String(crop?.[0]||0));
+    frame.style.setProperty('--crop-y',String(crop?.[1]||0));
+    frame.style.setProperty('--sheet-scale',String(image.sheetScale||2));
+  }
   function showPhoto() {
     const entry=catalog.editions[store.edition], gallery=entry.gallery, selected=gallery[photo];
     $('#order-image').src=selected.src; $('#order-image').alt=selected.alt;
+    $('#feature-image').src=selected.src; $('#feature-image').alt=selected.alt;
+    paintFrame($('#order-frame'),selected);paintFrame($('#feature-frame'),selected);
+    $('#order-frame').classList.remove('is-zoomed');$('#photo-zoom').setAttribute('aria-pressed','false');
+    $('#photo-zoom').setAttribute('aria-label','Magnify product photograph');
+    $('#feature-count').textContent=String(photo+1).padStart(2,'0')+' / '+String(gallery.length).padStart(2,'0');
     $('.order-photo').style.setProperty('--gallery-backdrop',`url("${selected.src}")`);
     $('#gallery-count').textContent=`${String(photo+1).padStart(2,'0')} / ${String(gallery.length).padStart(2,'0')}`;
     $('#gallery-caption').textContent=selected.label;
@@ -63,7 +77,7 @@
       button.setAttribute('aria-label',`View photo ${index+1}: ${image.label}`);
       button.setAttribute('aria-current',String(index===photo));
       const thumbnail=document.createElement('img'); thumbnail.src=image.src; thumbnail.alt=''; thumbnail.loading='lazy';
-      button.append(thumbnail); button.addEventListener('click',()=>{photo=index;showPhoto();});fragment.append(button);
+      const frame=document.createElement('span');frame.className='photo-frame';paintFrame(frame,image);frame.append(thumbnail);button.append(frame); button.addEventListener('click',()=>{photo=index;showPhoto();});fragment.append(button);
     });
     $('#gallery-thumbs').replaceChildren(fragment);
   }
@@ -76,7 +90,7 @@
     $$('[data-current-edition]').forEach(button=>{delete button.dataset.buy;button.dataset.cart=edition;});
     $$('[data-select], .finish').forEach(button=>{ const selected=(button.dataset.select||button.dataset.finish)===edition; button.setAttribute('aria-pressed',String(selected)); button.classList.toggle('active',selected); });
     $$('.product-card, .muse-card').forEach(card=>card.classList.toggle('selected-edition',card.dataset.edition===edition));
-    $('#order-title').textContent=catalog.editions[edition].title; $('#studio-word').textContent=edition==='pink'?'Rose.':'Silver.';
+    $('#order-title').textContent=catalog.editions[edition].title;
     $$('[data-price]').forEach(node=>node.textContent=price);
     $$('[data-volume]').forEach(node=>node.textContent=`${catalog.sizeMl} ml`);
     $$('[data-format]').forEach(node=>node.textContent=catalog.format);
@@ -97,6 +111,20 @@
   });
   $('#gallery-previous').addEventListener('click',()=>stepPhoto(-1));
   $('#gallery-next').addEventListener('click',()=>stepPhoto(1));
+  $('#feature-previous').addEventListener('click',()=>stepPhoto(-1));
+  $('#feature-next').addEventListener('click',()=>stepPhoto(1));
+  $('#photo-zoom').addEventListener('click',()=>{
+    const zoomed=$('#order-frame').classList.contains('is-zoomed');
+    $('#order-frame').classList.toggle('is-zoomed',!zoomed);
+    $('#photo-zoom').setAttribute('aria-pressed',String(!zoomed));
+    $('#photo-zoom').setAttribute('aria-label',zoomed?'Magnify product photograph':'Show complete product photograph');
+  });
+  $('#order-frame').addEventListener('pointermove',event=>{
+    if(reduced.matches||event.pointerType==='touch')return;
+    const box=event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty('--zoom-x',(event.clientX-box.left)/box.width*100+'%');
+    event.currentTarget.style.setProperty('--zoom-y',(event.clientY-box.top)/box.height*100+'%');
+  });
   $('.order-photo').addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();stepPhoto(event.key==='ArrowLeft'?-1:1);}});
 
   function outsideTrigger(trigger) {
@@ -209,21 +237,12 @@
   }
   noteLayers.forEach(button=>button.addEventListener('click',()=>revealNote(button)));
   if(noteLayers.length)revealNote(noteLayers.find(button=>button.getAttribute('aria-expanded')==='true')||noteLayers[0]);
-  function setProductView(view) {
-    const studio=view==='studio'; product.dataset.view=studio?'studio':'photos';
-    $('#studio-view').hidden=!studio; $('#product-photos').hidden=studio;
-    $('#view-studio').setAttribute('aria-pressed',String(studio)); $('#view-photos').setAttribute('aria-pressed',String(!studio));
-    $('.studio-lighting').hidden=!studio;
-    document.dispatchEvent(new CustomEvent('steeltown:studio',{detail:{open:product.open,view:product.dataset.view}}));
-  }
-  $('#view-studio').addEventListener('click',()=>setProductView('studio'));
-  $('#view-photos').addEventListener('click',()=>setProductView('photos'));
   function openProduct(edition,trigger) {
     store.selectEdition(edition); photo=0; buildGallery(); showPhoto();
-    showDialog(product,trigger,()=>{document.body.classList.add('product-open');setProductView('studio');});
+    showDialog(product,trigger,()=>{document.body.classList.add('product-open');product.dataset.view='photos';});
   }
   $$('[data-buy]').forEach(button=>button.addEventListener('click',()=>openProduct(button.dataset.buy,button)));
-  document.addEventListener('steeltown:open-product',()=>openProduct(store.edition,$('#bottle-canvas')));
+  document.addEventListener('steeltown:open-product',()=>openProduct(store.edition,$('#feature-open')));
   function exploreStudio(event) { openProduct(store.edition,event?.currentTarget); }
   $$('[data-explore-studio]').forEach(button=>button.addEventListener('click',exploreStudio));
   function syncTeaser() {
@@ -253,7 +272,7 @@
     dialog.addEventListener('close',()=>{
       if(dialog.open)return;
       if(dialog===film){video.pause();if(musicWanted)startMusic();}
-      if(dialog===product){document.body.classList.remove('product-open');document.dispatchEvent(new CustomEvent('steeltown:studio',{detail:{open:false,view:'studio'}}));}
+      if(dialog===product){document.body.classList.remove('product-open');}
       if(dialog===menu)$('#menu-open').setAttribute('aria-expanded','false');
       const next=afterClose.get(dialog);afterClose.delete(dialog);
       const revision=next?.revision??dialogRevision, context=contexts.get(dialog);
