@@ -51,11 +51,18 @@
 
   function paintFrame(frame,image) {
     const crop=image.crop;
-    frame.dataset.crop=crop?'sheet':'full';
+    frame.dataset.crop=image.layout==='strip'?'strip':crop?'sheet':'full';
     frame.dataset.scene=image.scene||'pearl';
     frame.style.setProperty('--crop-x',String(crop?.[0]||0));
     frame.style.setProperty('--crop-y',String(crop?.[1]||0));
     frame.style.setProperty('--sheet-scale',String(image.sheetScale||2));
+    if(image.layout==='strip') {
+      const [x,y,width,height]=image.stripRect||[0,0,384,940];
+      frame.style.setProperty('--strip-ratio',`${width}/${height}`);
+      frame.style.setProperty('--strip-image-width',`${1536/width*100}%`);
+      frame.style.setProperty('--strip-left',`${-x/width*100}%`);
+      frame.style.setProperty('--strip-top',`${-y/height*100}%`);
+    }
   }
   function showPhoto() {
     const entry=catalog.editions[store.edition], gallery=entry.gallery, selected=gallery[photo];
@@ -65,21 +72,29 @@
     $('#order-frame').classList.remove('is-zoomed');$('#photo-zoom').setAttribute('aria-pressed','false');
     $('#photo-zoom').setAttribute('aria-label','Magnify product photograph');
     $('#feature-count').textContent=String(photo+1).padStart(2,'0')+' / '+String(gallery.length).padStart(2,'0');
+    $('#feature-caption').textContent=selected.label;
+    $('#gallery-total').textContent=gallery.length+' perspectives';
     $('.order-photo').style.setProperty('--gallery-backdrop',`url("${selected.src}")`);
     $('#gallery-count').textContent=`${String(photo+1).padStart(2,'0')} / ${String(gallery.length).padStart(2,'0')}`;
     $('#gallery-caption').textContent=selected.label;
-    $$('#gallery-thumbs button').forEach((button,index)=>button.setAttribute('aria-current',String(index===photo)));
+    for(const strip of [$('#gallery-thumbs'),$('#feature-thumbs')]){
+      [...strip.children].forEach((button,index)=>button.setAttribute('aria-current',String(index===photo)));
+      const active=strip.children[photo];
+      if(active && strip.scrollWidth>strip.clientWidth)strip.scrollLeft=active.offsetLeft-(strip.clientWidth-active.clientWidth)/2;
+    }
   }
   function buildGallery() {
-    const fragment=document.createDocumentFragment();
+    const fragment=document.createDocumentFragment(), inlineFragment=document.createDocumentFragment();
     catalog.editions[store.edition].gallery.forEach((image,index)=>{
       const button=document.createElement('button'); button.type='button';
       button.setAttribute('aria-label',`View photo ${index+1}: ${image.label}`);
       button.setAttribute('aria-current',String(index===photo));
       const thumbnail=document.createElement('img'); thumbnail.src=image.src; thumbnail.alt=''; thumbnail.loading='lazy';
       const frame=document.createElement('span');frame.className='photo-frame';paintFrame(frame,image);frame.append(thumbnail);button.append(frame); button.addEventListener('click',()=>{photo=index;showPhoto();});fragment.append(button);
+      const inlineButton=button.cloneNode(true);inlineButton.addEventListener('click',()=>{photo=index;showPhoto();});inlineFragment.append(inlineButton);
     });
     $('#gallery-thumbs').replaceChildren(fragment);
+    $('#feature-thumbs').replaceChildren(inlineFragment);
   }
   function stepPhoto(direction) {
     const count=catalog.editions[store.edition].gallery.length;
@@ -237,13 +252,13 @@
   }
   noteLayers.forEach(button=>button.addEventListener('click',()=>revealNote(button)));
   if(noteLayers.length)revealNote(noteLayers.find(button=>button.getAttribute('aria-expanded')==='true')||noteLayers[0]);
-  function openProduct(edition,trigger) {
-    store.selectEdition(edition); photo=0; buildGallery(); showPhoto();
+  function openProduct(edition,trigger,selectedPhoto=0) {
+    store.selectEdition(edition); photo=Math.max(0,Math.min(selectedPhoto,catalog.editions[store.edition].gallery.length-1)); buildGallery(); showPhoto();
     showDialog(product,trigger,()=>{document.body.classList.add('product-open');product.dataset.view='photos';});
   }
   $$('[data-buy]').forEach(button=>button.addEventListener('click',()=>openProduct(button.dataset.buy,button)));
-  document.addEventListener('steeltown:open-product',()=>openProduct(store.edition,$('#feature-open')));
-  function exploreStudio(event) { openProduct(store.edition,event?.currentTarget); }
+  document.addEventListener('steeltown:open-product',()=>openProduct(store.edition,$('#feature-open'),photo));
+  function exploreStudio(event) { openProduct(store.edition,event?.currentTarget,photo); }
   $$('[data-explore-studio]').forEach(button=>button.addEventListener('click',exploreStudio));
   function syncTeaser() {
     $('#teaser-pause').disabled=!canMove(); $('#replay-teaser').disabled=!canMove();

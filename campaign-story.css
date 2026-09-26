@@ -1,0 +1,156 @@
+.campaign-story {
+  --story-ink: #08080a;
+  --story-rose: #ffb6c1;
+  --story-paper: #f9f0f2;
+  --story-gutter: clamp(24px, 6vw, 100px);
+  position: relative;
+  z-index: 1;
+  background: var(--story-ink);
+  color: var(--story-paper);
+  scroll-margin-top: 100px;
+}
+.campaign-story *, .campaign-story *::before, .campaign-story *::after { box-sizing: border-box; }
+.campaign-story ::selection { color: var(--story-ink); background: var(--story-rose); }
+.campaign-story__intro {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: end;
+  gap: 48px;
+  padding: 120px var(--story-gutter) 72px;
+}
+.campaign-story__intro h2 {
+  margin: 0;
+  max-width: 760px;
+  font: 400 clamp(54px, 6.2vw, 96px)/0.97 var(--serif, 'Cormorant Garamond', Georgia, serif);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.campaign-story em { color: var(--story-rose); font-weight: 400; }
+.campaign-story__invitation { justify-self: end; max-width: 340px; padding-bottom: 5px; }
+.campaign-story__invitation p {
+  margin: 0 0 21px;
+  color: #d5bdc8;
+  font: 400 14px/1.8 var(--sans, Manrope, Arial, sans-serif);
+  text-wrap: pretty;
+}
+.campaign-story__link, .campaign-story__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  gap: 22px;
+  font: 500 12px/1.5 var(--sans, Manrope, Arial, sans-serif);
+  text-decoration: none;
+  text-underline-offset: 5px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: #ffb6c126;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+.campaign-story__link { color: #eed6df; border-bottom: 1px solid #8d6c7b; }
+.campaign-story__link:hover { color: #fff; border-color: var(--story-rose); }
+.campaign-story__button { color: #25151b; background: var(--story-rose); padding: 15px 23px; }
+.campaign-story__button:hover { background: #ffdde5; }
+.campaign-story a:focus-visible { outline: 2px solid #ffdae2; outline-offset: 6px; }
+.campaign-story svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; flex: none; }
+.campaign-story__reel { padding: 0 var(--story-gutter); }
+.campaign-story__stage { position: relative; }
+.campaign-story__scene {
+  --story-drift: 0px;
+  --story-main-position: 50% 45%;
+  --story-detail-position: 50% 50%;
+  position: relative;
+  margin-bottom: 56px;
+  min-width: 0;
+  isolation: isolate;
+}
+.campaign-story__visual { position: relative; height: clamp(470px, 49vw, 690px); overflow: hidden; }
+.campaign-story__main-image, .campaign-story__detail-image {
+  position: absolute;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+.campaign-story__main-image { inset: 0 auto 0 0; width: 81%; object-position: var(--story-main-position); }
+.campaign-story__detail-image {
+  top: 9%;
+  right: 0;
+  width: 28%;
+  height: 66%;
+  border: 1px solid #f5c1d02b;
+  object-position: var(--story-detail-position);
+  z-index: 1;
+}
+.campaign-story__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #08080a 0%, #08080af0 9%, #08080ab8 28%, #08080a08 68%);
+  pointer-events: none;
+  z-index: 2;
+}
+.campaign-story__copy { position: absolute; z-index: 3; left: 40px; right: 24px; bottom: 38px; max-width: 660px; }
+.campaign-story__copy h3 {
+  margin: 0;
+  font: 400 clamp(56px, 6.1vw, 88px)/0.95 var(--serif, 'Cormorant Garamond', Georgia, serif);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.campaign-story__copy p { margin: 20px 0 0; color: #ead6df; font: 400 13px/1.8 var(--sans, Manrope, Arial, sans-serif); max-width: 45ch; text-wrap: pretty; }
+.campaign-story__scene--courage { --story-main-position: 38% 36%; --story-detail-position: 64% 50%; }
+.campaign-story__scene--connection { --story-main-position: 73% 45%; --story-detail-position: 51% 50%; }
+.campaign-story__scene--memory { --story-main-position: 48% 30%; --story-detail-position: 50% 50%; }
+.campaign-story__progress { display: none; }
+.campaign-story__outro { display: flex; align-items: center; justify-content: space-between; gap: 40px; padding: 28px var(--story-gutter) 106px; }
+.campaign-story__outro > p { margin: 0; font: italic 400 clamp(32px, 3vw, 48px)/1.1 var(--serif, 'Cormorant Garamond', Georgia, serif); color: #e4b6c8; }
+.campaign-story__actions { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+
+@media (min-width: 960px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) {
+  .campaign-story.is-story-enhanced .campaign-story__reel { height: calc(275svh + min(760px, 100svh - 126px)); }
+  .campaign-story.is-story-enhanced .campaign-story__stage { position: sticky; top: 106px; height: min(760px, calc(100svh - 126px)); overflow: hidden; isolation: isolate; }
+  .campaign-story.is-story-enhanced .campaign-story__scene { position: absolute; inset: 0; margin: 0; opacity: 0; pointer-events: none; transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .campaign-story.is-story-enhanced .campaign-story__scene.is-active { opacity: 1; }
+  .campaign-story.is-story-enhanced .campaign-story__visual { height: 100%; }
+  .campaign-story.is-story-enhanced .campaign-story__main-image { transform: translate3d(0, var(--story-drift), 0) scale(1.05); transform-origin: center; }
+  .campaign-story.is-story-enhanced .campaign-story__detail-image { transform: translate3d(0, calc(var(--story-drift) * -0.65), 0); }
+  .campaign-story.is-story-enhanced .campaign-story__progress { position: absolute; display: block; left: 40px; right: 40px; bottom: 10px; height: 1px; background: #ffb6c126; z-index: 4; pointer-events: none; }
+  .campaign-story.is-story-enhanced .campaign-story__progress span { display: block; height: 100%; background: #e8a9bb; transform: scaleX(0); transform-origin: left center; }
+  .campaign-story.is-story-enhanced .campaign-story__outro { padding-top: 64px; }
+}
+
+@media (max-width: 959px) {
+  .campaign-story__intro { grid-template-columns: 1fr; gap: 27px; padding-top: 82px; padding-bottom: 42px; }
+  .campaign-story__intro h2 { font-size: clamp(48px, 9vw, 72px); }
+  .campaign-story__invitation { justify-self: start; max-width: 42ch; }
+  .campaign-story__invitation p { font-size: 13px; }
+  .campaign-story__visual { height: clamp(280px, 58vw, 500px); }
+  .campaign-story__scene { margin-bottom: 34px; }
+  .campaign-story__copy { position: relative; left: auto; right: auto; bottom: auto; padding: 25px 0 25px; }
+  .campaign-story__copy h3 { font-size: clamp(42px, 7.6vw, 62px); line-height: 1.02; }
+  .campaign-story__copy h3 br { display: none; }
+  .campaign-story__copy h3 em::before { content: ' '; }
+  .campaign-story__copy p { margin-top: 13px; font-size: 12px; }
+  .campaign-story__visual::after { background: linear-gradient(0deg, #08080a8c, transparent 28%); }
+  .campaign-story__main-image { width: 100%; }
+  .campaign-story__detail-image { top: auto; bottom: 0; width: 36%; height: 61%; }
+  .campaign-story__scene--beginnings { --story-main-position: 43% 40%; }
+  .campaign-story__scene--connection .campaign-story__detail-image { left: 0; right: auto; }
+  .campaign-story__outro { align-items: start; flex-direction: column; gap: 24px; padding-top: 10px; padding-bottom: 76px; }
+}
+@media (max-width: 480px) {
+  .campaign-story { --story-gutter: max(20px, env(safe-area-inset-left)); }
+  .campaign-story__intro { padding-top: 68px; }
+  .campaign-story__intro h2 { font-size: clamp(43px, 12vw, 58px); }
+  .campaign-story__visual { height: 250px; }
+  .campaign-story__detail-image { width: 35%; height: 56%; }
+  .campaign-story__scene--beginnings .campaign-story__main-image { object-position: 39% 40%; }
+  .campaign-story__scene--courage .campaign-story__main-image { object-position: 34% 35%; }
+  .campaign-story__scene--connection .campaign-story__main-image { object-position: 77% 40%; }
+  .campaign-story__scene--memory .campaign-story__main-image { object-position: 49% 38%; }
+  .campaign-story__copy h3 { font-size: 43px; }
+  .campaign-story__actions { width: 100%; gap: 18px; }
+  .campaign-story__button { min-width: 180px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .campaign-story__scene, .campaign-story__main-image, .campaign-story__detail-image { transition: none; transform: none; }
+  .campaign-story__scene { opacity: 1; }
+}
