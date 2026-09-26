@@ -1,0 +1,54 @@
+/* Hairlines remain visible without the optional motion module. */
+:is(.hero-art, .photo-frame, .muse-image, .craft-visual, .couture-image, .hero-media),
+:is(.campaign-story__main-image, .campaign-story__detail-image, #cart-image) {
+  outline: 1px solid #ddb9c96b;
+  outline-offset: -1px;
+}
+:is(.gallery-thumbs, #feature-thumbs) .photo-frame {
+  outline-color: #d1c4cf85;
+  outline-offset: -2px;
+}
+:is(.gallery-thumbs, #feature-thumbs) button[aria-current="true"] .photo-frame {
+  outline-color: #ffe0e9;
+}
+.photo-frame-positioned { position: relative; }
+.photo-light-frame {
+  position: absolute;
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none !important;
+  user-select: none;
+  color: #f4bccf;
+  contain: layout paint;
+}
+.photo-light-frame * { pointer-events: none !important; }
+.photo-light-frame[data-photo-kind="story-main"] { z-index: 0; }
+.photo-light-frame__rim { fill: none; stroke-width: 0.8; opacity: 0.75; }
+.photo-light-frame__inner { fill: none; stroke: #f7dce82e; stroke-width: 0.65; }
+.photo-light-frame__corners { fill: none; stroke: #ffe1ec; stroke-width: 1.25; opacity: 0.88; }
+.photo-light-frame__runner, .photo-light-frame__trail {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.photo-light-frame__runner { stroke: #fff6fa; stroke-width: 1.8; stroke-dasharray: 8 92; }
+.photo-light-frame__trail { stroke: #f5a9c5; stroke-width: 3.2; stroke-dasharray: 12 88; }
+.photo-light-frame:is([data-photo-kind="thumbnail"], [data-photo-kind="cart"]) :is(.photo-light-frame__inner, .photo-light-frame__corners, .photo-light-frame__trail) { display: none; }
+.photo-light-frame:is([data-photo-kind="thumbnail"], [data-photo-kind="cart"]) .photo-light-frame__runner { stroke-width: 1.25; stroke-dasharray: 15 85; }
+.campaign-story.is-story-enhanced .photo-light-frame[data-photo-kind="story-detail"] {
+  transform: translate3d(0, calc(var(--story-drift, 0px) * -0.65), 0);
+}
+@media (max-width: 767px) {
+  .photo-light-frame__rim { opacity: 0.86; }
+  .photo-light-frame__corners { stroke-width: 1.1; }
+  .photo-light-frame__trail { display: none; }
+  .photo-light-frame__runner { stroke-width: 1.6; stroke-dasharray: 10 90; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-light-frame__runner, .photo-light-frame__trail { display: none; }
+  .campaign-story .photo-light-frame { transform: none; }
+}

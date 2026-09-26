@@ -20,14 +20,14 @@
     animation.finished.catch(() => {}).finally(() => running.delete(animation));
   }
   const textFrames = [{opacity:0,transform:'translateY(25px)',filter:'blur(4px)'},{opacity:1,transform:'none',filter:'blur(0)'}];
-  document.querySelectorAll('.hero-copy .eyebrow, h1 span, h1 em, .hero-caption, .hero-actions').forEach((node,index) => animate(node,textFrames,{duration:1100,delay:index*125,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
+  document.querySelectorAll('.hero-caption, .hero-actions').forEach((node,index) => animate(node,textFrames,{duration:1100,delay:index*125,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
   const reveal = new IntersectionObserver(entries => {
     if(suspended)return;
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
       const node = entry.target;
       const pieces=node.children.length>1?[...node.children]:[node];
-      pieces.forEach((piece,index)=>animate(piece,textFrames,{duration:950,delay:index*100,easing:'cubic-bezier(.16,1,.3,1)'}));
+      pieces.filter(piece=>!piece.matches('h1,h2,h3,.eyebrow,.footer-wordmark')&&!piece.querySelector('h1,h2,h3')).forEach((piece,index)=>animate(piece,textFrames,{duration:950,delay:index*100,easing:'cubic-bezier(.16,1,.3,1)'}));
       reveal.unobserve(node);
       unrevealed.delete(node);
     }
