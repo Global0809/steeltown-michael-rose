@@ -8,7 +8,6 @@
   const dialogOrder = new Map();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = window.matchMedia('(max-width: 767px)');
-  const narrowHero = window.matchMedia('(max-width: 700px)');
   let nextId = 0;
   let openingOrder = 0;
   let measureFrame = 0;
@@ -107,12 +106,8 @@
     if (pageSuspended || document.hidden) return;
     const measurements = [...pendingMeasurements].filter((record) => record.image.isConnected).map((record) => {
       const box = record.box;
-      let width = box.offsetWidth;
-      let left = record.imageBox ? box.offsetLeft : 0;
-      if (record.host.matches('.hero-art') && narrowHero.matches) {
-        left = Math.max(0, 24 - record.host.getBoundingClientRect().left);
-        width = Math.min(width, Math.max(0, window.innerWidth - 48));
-      }
+      const width = box.offsetWidth;
+      const left = record.imageBox ? box.offsetLeft : 0;
       return { record, width, height: box.offsetHeight, left, top: record.imageBox ? box.offsetTop : 0 };
     });
     pendingMeasurements.clear();
@@ -252,9 +247,6 @@
   reducedMotion.addEventListener('change', reconcile);
   mobile.addEventListener('change', () => {
     records.forEach((record) => { if (record.running) { stop(record); play(record); } });
-  });
-  narrowHero.addEventListener('change', () => {
-    records.forEach((record) => { if (record.host.matches('.hero-art')) queueMeasurement(record); });
   });
   window.addEventListener('pagehide', suspend);
   window.addEventListener('pageshow', resume);
