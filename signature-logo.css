@@ -1,0 +1,19 @@
+/* The fixed signature catches the same chrome-and-rose light as the bottle. */
+.header .wordmark.has-signature-light{position:relative;isolation:isolate;overflow:visible}
+.header .wordmark.has-signature-light::before{content:'';position:absolute;z-index:-1;inset:-9px -21px -11px;pointer-events:none;background:radial-gradient(ellipse at 50% 63%,#d9558633 0%,#ce437518 38%,transparent 71%);opacity:.5;transform:scale(.96);animation:signature-reflection 5.6s ease-in-out infinite;animation-play-state:paused}
+.header .wordmark.has-signature-light>.signature-light{position:absolute;z-index:-1;left:-13px;top:-10px;width:calc(100% + 26px);height:calc(100% + 21px);overflow:visible;fill:none;pointer-events:none;contain:layout style}
+.signature-light .signature-orbit{stroke:#f8b4d0;stroke-width:.55;opacity:.24;vector-effect:non-scaling-stroke}
+.signature-light .signature-comet{stroke:#fff4fa;stroke-width:1.35;stroke-linecap:round;stroke-dasharray:7 93;stroke-dashoffset:0;vector-effect:non-scaling-stroke;animation:signature-trace 6.2s linear infinite;animation-play-state:paused}
+.signature-light .signature-comet--rose{stroke:#eb88b1;stroke-width:2.4;stroke-dasharray:13 87;opacity:.52;animation-duration:8.3s;animation-direction:reverse}
+.signature-light .signature-glint{stroke:#ffe9f2;stroke-width:.85;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;opacity:.35;animation:signature-glint 4.8s ease-in-out infinite;animation-play-state:paused}
+.signature-light .signature-glint--second{animation-delay:-2.4s}
+.header .wordmark.has-signature-light strong .kinetic-letter{color:#f2dce6;text-shadow:0 1px 5px #e378a122;animation:signature-chrome 4.8s ease-in-out infinite;animation-delay:calc(var(--letter-index)*-.32s);animation-play-state:paused}
+.header .wordmark.has-signature-light.is-signature-live::before,.header .wordmark.has-signature-light.is-signature-live .signature-comet,.header .wordmark.has-signature-light.is-signature-live .signature-glint,.header .wordmark.has-signature-light.is-signature-live strong .kinetic-letter{animation-play-state:running}
+.header .wordmark.has-signature-light:focus-visible{outline:1px solid #ffd4e5;outline-offset:12px}
+.header .wordmark.has-signature-light:hover::before,.header .wordmark.has-signature-light:focus-visible::before{background:radial-gradient(ellipse at 50% 63%,#e875a14a 0%,#ce437525 38%,transparent 71%)}
+@keyframes signature-reflection{0%,100%{opacity:.48;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}
+@keyframes signature-trace{to{stroke-dashoffset:-100}}
+@keyframes signature-glint{0%,100%{opacity:.2;transform:scale(.72)}46%{opacity:.92;transform:scale(1.15)}65%{opacity:.45;transform:scale(.9)}}
+@keyframes signature-chrome{0%,100%{color:#e8b9ce;text-shadow:0 1px 4px #df729a35}26%{color:#f9e8ef;text-shadow:0 1px 7px #ee9fbf50}42%{color:#fffafc;text-shadow:0 1px 2px #fff9fc99,0 2px 11px #ec9abb70}65%{color:#f4dce6;text-shadow:0 1px 5px #df729a35}}
+@media(max-width:700px){.header .wordmark.has-signature-light>.signature-light{left:-10px;top:-9px;width:calc(100% + 20px);height:calc(100% + 19px)}.signature-light .signature-comet{stroke-width:1.15}.signature-light .signature-comet--rose{stroke-width:1.8}}
+@media(prefers-reduced-motion:reduce){.header .wordmark.has-signature-light::before,.header .wordmark.has-signature-light strong .kinetic-letter,.signature-light .signature-comet,.signature-light .signature-glint{animation:none!important;transform:none!important}.header .wordmark.has-signature-light::before{opacity:.45}.header .wordmark.has-signature-light strong .kinetic-letter{color:#f8e8ef;text-shadow:none}.signature-light .signature-comet{display:none}.signature-light .signature-glint{opacity:.5}}

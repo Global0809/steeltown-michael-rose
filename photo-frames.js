@@ -1,7 +1,7 @@
 (() => {
   if (window.steeltownPhotoFrames) return;
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const imageSelector = '.hero-art > img, .photo-frame > img, .muse-image > img, .craft-visual > img, .couture-image > img, .hero-media > img, .campaign-story__visual > img, #cart-image';
+  const imageSelector = '.hero-art > img, .photo-frame > img, .muse-image > img, .craft-visual > img, .couture-image > img, .hero-media > img, #cart-image';
   const records = new Map();
   const boxes = new Map();
   const pendingMeasurements = new Set();
@@ -54,7 +54,6 @@
   function allowed(record, dialog) {
     if (pageSuspended || document.hidden || reducedMotion.matches || !record.inView || !record.image.isConnected) return false;
     if (dialog ? record.dialog !== dialog : record.dialog && !record.dialog.open) return false;
-    if (record.scene && record.story.classList.contains('is-story-enhanced') && !record.scene.classList.contains('is-active')) return false;
     return !record.image.closest('[hidden]');
   }
 
@@ -153,7 +152,6 @@
     });
   });
 
-  const sceneObserver = new MutationObserver(reconcile);
   const dialogObserver = new MutationObserver((mutations) => {
     mutations.forEach(({ target, attributeName }) => {
       if (attributeName === 'open' && target.open) dialogOrder.set(target, ++openingOrder);
@@ -182,11 +180,11 @@
     document.querySelectorAll(imageSelector).forEach((image) => {
       if (records.has(image)) return;
       const host = image.parentElement;
-      const kind = image.classList.contains('campaign-story__main-image') ? 'story-main' : image.classList.contains('campaign-story__detail-image') ? 'story-detail' : image.id === 'cart-image' ? 'cart' : image.closest('.gallery-thumbs, #feature-thumbs') ? 'thumbnail' : 'photo';
-      const imageBox = kind.startsWith('story-') || kind === 'cart';
+      const kind = image.id === 'cart-image' ? 'cart' : image.closest('.gallery-thumbs, #feature-thumbs') ? 'thumbnail' : 'photo';
+      const imageBox = kind === 'cart';
       const box = imageBox ? image : host;
       if (getComputedStyle(host).position === 'static') host.classList.add('photo-frame-positioned');
-      const record = { ...makeFrame(kind), ordinal: nextId, kind, imageBox, image, host, box, dialog: image.closest('dialog'), scene: image.closest('.campaign-story__scene'), story: image.closest('.campaign-story'), inView: false, eligible: false, running: false, animations: [], revision: 0 };
+      const record = { ...makeFrame(kind), ordinal: nextId, kind, imageBox, image, host, box, dialog: image.closest('dialog'), inView: false, eligible: false, running: false, animations: [], revision: 0 };
       record.onInteraction = () => play(record);
       host.addEventListener('pointerenter', record.onInteraction);
       host.addEventListener('focusin', record.onInteraction);
@@ -212,7 +210,6 @@
 
   function observeContext() {
     structureObserver.observe(document.body, { childList: true, subtree: true });
-    document.querySelectorAll('#story, #story .campaign-story__scene').forEach((scene) => sceneObserver.observe(scene, { attributes: true, attributeFilter: ['class'] }));
     document.querySelectorAll('dialog').forEach((dialog) => {
       if (dialog.open && !dialogOrder.has(dialog)) dialogOrder.set(dialog, ++openingOrder);
       dialogObserver.observe(dialog, { attributes: true, attributeFilter: ['open', 'hidden'] });
@@ -230,7 +227,7 @@
     if (measureFrame) cancelAnimationFrame(measureFrame);
     if (discoveryFrame) cancelAnimationFrame(discoveryFrame);
     measureFrame = discoveryFrame = 0;
-    [intersectionObserver, resizeObserver, sourceObserver, sceneObserver, dialogObserver, structureObserver].forEach((observer) => observer?.disconnect());
+    [intersectionObserver, resizeObserver, sourceObserver, dialogObserver, structureObserver].forEach((observer) => observer?.disconnect());
     records.forEach((record) => { record.inView = false; record.eligible = false; stop(record); });
   }
 

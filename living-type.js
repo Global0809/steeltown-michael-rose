@@ -5,17 +5,15 @@
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const events = new AbortController();
   const on = (node,type,handler,options={}) => node?.addEventListener(type,handler,{...options,signal:events.signal});
-  const selector = '#hero-title,#atelier-title,#edition-name,#couture-title,#scent-title,#collection-title,#craft-title,#story-title,#film-title,#invitation-title,.campaign-story__copy h3,.scent-echo p,.footer-wordmark,.wordmark strong,.wordmark>span,.wordmark small,.hero-copy>.eyebrow,.collection-heading .eyebrow,.craft-copy>.eyebrow,.film-heading>.eyebrow,.invitation>.eyebrow';
+  const selector = '#hero-title,#atelier-title,#edition-name,#couture-title,#scent-title,#collection-title,#craft-title,#film-title,#invitation-title,.scent-echo p,.footer-wordmark,.wordmark strong,.wordmark>span,.wordmark small,.hero-copy>.eyebrow,.collection-heading .eyebrow,.craft-copy>.eyebrow,.film-heading>.eyebrow,.invitation>.eyebrow';
   const titles = [...document.querySelectorAll(selector)];
   const visible = new Set(), entered = new WeakSet(), running = new Map(), letterAnimations = new WeakMap(), pointers = new Map();
   const dialogs = [...document.querySelectorAll('dialog')];
   let suspended = false, frame = 0, paused = false;
   const canMove = () => !reduced.matches && !document.hidden && !suspended && !paused;
-  const story = document.querySelector('#story');
   const active = title => {
     const dialog = dialogs.find(item=>item.open);
-    const scene = title.closest('[data-story-scene]');
-    return canMove() && visible.has(title) && (!dialog || dialog.contains(title)) && (!scene || !story?.classList.contains('is-story-enhanced') || scene.classList.contains('is-active'));
+    return canMove() && visible.has(title) && (!dialog || dialog.contains(title));
   };
   function split(title) {
     if (title.querySelector('.kinetic-word')) return;
@@ -111,7 +109,6 @@
   // Only semantic state attributes are observed; animated inline styles never trigger this observer.
   const stateObserver=new MutationObserver(sync);
   dialogs.forEach(dialog=>stateObserver.observe(dialog,{attributes:true,attributeFilter:['open']}));
-  if(story){stateObserver.observe(story,{attributes:true,attributeFilter:['class']});story.querySelectorAll('[data-story-scene]').forEach(scene=>stateObserver.observe(scene,{attributes:true,attributeFilter:['class']}));}
   on(document,'steeltown:finish',()=>{
     const title=document.getElementById('edition-name');if(!title)return;
     split(title);entered.delete(title);sync();
